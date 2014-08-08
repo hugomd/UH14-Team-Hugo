@@ -1,5 +1,11 @@
 import os
 import sqlite3
+from flask_bootstrap import Bootstrap
+from datetime import datetime, timedelta
+from flask_wtf import Form
+from wtforms import StringField, validators
+from wtforms.validators import Email, InputRequired, ValidationError, Required, DataRequired
+
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 
 app = Flask(__name__)
@@ -37,9 +43,45 @@ def init_db():
             db.cursor().executescript(f.read())
         db.commit()
 
-@app.route("/")
-def hello():
-    return "Hello World!"
+class SignupForm(Form):
+    mc_user = StringField(u'Minecraft Username', validators=[validators.input_required()])
+    email = StringField(u'Email', validators=[validators.input_required()])
+
+@app.route("/", methods=['GET', 'POST'])
+def index():
+    form = SignupForm(request.form)
+    if form.validate():
+        print("TRUE")
+    else:
+        print("FALSE")
+
+    if request.method == 'POST':
+        if form.validate_on_submit() == False:
+            flash("All fields are required!")
+        else:
+            flash("Success....?")
+
+        return render_template('index.html', title="Craft! - Register YAY", form=form)
+
+    return render_template('index.html', title="Craft! - simple, fast Minecraft servers", form=form)
+
+
+@app.route("/regster", methods=['GET', 'POST'])
+def register():
+
+
+    error = None
+    # if request.method == 'POST':
+    #     expires = int(time.time()) + 7200
+    #     email = request.form['email']
+    #     mc_user = request.form['mc_user']
+    #     play_time = 60 # minutes
+
+    return render_template('index.html', title="Craft! - Register")
+
+@app.route("/faq")
+def faq():
+    return render_template('index.html', title="Craft! - FAQ")
 
 if __name__ == "__main__":
     app.run()
