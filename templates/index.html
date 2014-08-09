@@ -23,6 +23,12 @@
                                 {% endfor %}</div>
                             {% endif %}
 
+                            {% if form.mc_user.errors %}
+                                <div class="alert alert-danger">{% for error in form.mc_user.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}</div>
+                            {% endif %}
+
                             <form role="form" action="/" method="POST">
                                 {{ form.hidden_tag() }}
                                 <div class="form-group">
@@ -48,7 +54,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <button type="submit" name="submit" class="btn btn-primary">Go!</button>
+                                    <button type="submit" name="submit" class="btn btn-success">Go!</button>
                                 </div>
 
                                 <div class="alert alert-info">
@@ -56,7 +62,7 @@
                                         <li>Type in your email and Minecraft username</li>
                                         <li>Hit Go!</li>
                                         <li>You'll be given the IP address of your server, copy and paste that into Minecraft</li>
-                                        <li>Spam the refresh button in Minecraft until your server is up, it shouldn't take too long</li>
+                                        <li>Wait approximately 2 minutes, it might even be sooner!</li>
                                     </ul>
                                 </div>
                             </form>
