@@ -1,4 +1,4 @@
-import os
+import os, string, random, time
 import sqlite3
 from flask_bootstrap import Bootstrap
 from datetime import datetime, timedelta
@@ -6,7 +6,11 @@ from flask_wtf import Form
 from wtforms import StringField, validators
 from wtforms.validators import Email, InputRequired, ValidationError, Required, DataRequired
 
-from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
+from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, Markup
+
+# digital ocean
+from dopy.manager import DoManager
+do = DoManager('PyDSOzmle2zsvUO86yxqv', '9a48657f7a9c50261865af0bbb558f0e')
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -43,30 +47,58 @@ def init_db():
             db.cursor().executescript(f.read())
         db.commit()
 
+def query_db(query, args=(), one=False):
+    """Queries the database and returns a list of dictionaries."""
+    cur = get_db().execute(query, args)
+    rv = cur.fetchall()
+    return (rv[0] if rv else None) if one else rv
+
+def get_user_id(email, mc_user):
+    """Convenience method to look up the id for a username."""
+    rv = query_db('SELECT id FROM users WHERE email = ? OR mc_user = ?',
+                  [email, mc_user], one=True)
+    return rv[0] if rv else None
+
 class SignupForm(Form):
-    mc_user = StringField(u'Minecraft Username', validators=[validators.input_required()])
-    email = StringField(u'Email', validators=[validators.input_required()])
+    mc_user = StringField(u'Minecraft Username', validators=[validators.Required(message=u'Minecraft username required')])
+    email = StringField(u'Email', validators=[validators.Email(message=u'That\'s not an email!')])
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
     form = SignupForm(request.form)
-    if form.validate():
-        print("TRUE")
-    else:
-        print("FALSE")
 
     if request.method == 'POST':
-        if form.validate_on_submit() == False:
-            flash("All fields are required!")
-        else:
-            flash("Success....?")
+        if form.validate_on_submit() == True:
+            """Store stuff"""
+            expires = int(time.time()) + 7200
+            email = request.form['email']
+            mc_user = request.form['mc_user']
+            play_time = 120 # minutes
+            server_ip = "127.0.0.1"
+            key = ''.join(random.choice(string.ascii_uppercase) for i in range(20))
 
-        return render_template('index.html', title="Craft! - Register YAY", form=form)
+            db = get_db()
+            if get_user_id(email, mc_user) is None:
+                db.execute("INSERT INTO users (mc_user, email, server_hostname, server_ip, key, play_time, expires) VALUES (?, ?, ?, ?, ?, ?, ?)", [mc_user, email, mc_user, server_ip, key, play_time, expires])
+
+                db.commit()
+
+                # create minecraft server
+                do.new_droplet('MINECRAFTUSERNAME', 63, 5588929, 6, ssh_key_ids = None, virtio = False, private_networking = False, backups_enabled = False)
+
+                for i in do.all_active_droplets():
+                    if i['name'] == mc_user:
+                        ip = i['ip_address']
+
+                flash(Markup("Awesome! Your account has been setup, <a href='http://localhost:5000/key/" + key + "/'>here</a> to see if your server is setup."))
+
+            else:
+                flash("Email or Minecraft username already in use.")
 
     return render_template('index.html', title="Craft! - simple, fast Minecraft servers", form=form)
 
 
-@app.route("/regster", methods=['GET', 'POST'])
+@app.route("/register", methods=['GET', 'POST'])
 def register():
 
 
@@ -82,6 +114,18 @@ def register():
 @app.route("/faq")
 def faq():
     return render_template('index.html', title="Craft! - FAQ")
+
+@app.route("/api/<hostname>")
+def api(hostname):
+    db = get_db()
+
+    user = query_db('SELECT * FROM users WHERE mc_user = ?',
+                  [hostname], one=True)
+
+
+    for i in do.all_active_droplets():
+        i['ip_address']
+    return render_template('API.html', title="API!", hostname = hostname, user = user)
 
 if __name__ == "__main__":
     app.run()

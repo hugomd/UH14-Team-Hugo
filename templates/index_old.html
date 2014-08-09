@@ -1,12 +1,12 @@
 {% extends "header.html" %}
     {% block body %}
         <div class="row">
-            <div class="col-md-8 col-md-offset-4">
+            <div class="col-md-8 col-md-offset-2">
                 <div class="col-md-8">
                     <h1>Craft!</h1>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-6 col-md-push-6">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             <h3 class="panel-title">Let's go!</h3>
@@ -51,16 +51,44 @@
                                     <button type="submit" name="submit" class="btn btn-primary">Go!</button>
                                 </div>
 
-                                <div class="alert alert-info">
-                                    <ul>
-                                        <li>Type in your email and Minecraft username</li>
-                                        <li>Hit Go!</li>
-                                        <li>You'll be given the IP address of your server, copy and paste that into Minecraft</li>
-                                        <li>Spam the refresh button in Minecraft until your server is up, it shouldn't take too long</li>
-                                    </ul>
-                                </div>
+                                <div class="alert alert-info"><p>You might be wondering why the prices don't quite align with DigitalOcean's per hour cost of $0.007/hour - it's because I decided
+                                                              to use <a href="https://stripe.com/">Stripe</a> for easy payments and they have a $0.30 transaction fee. </p>
+                                                              <p>If this <i>really</i> upsets you, <a href='http://twitter.com/hugomelb'>hit me up</a> and I'll waive the fee</div>
                             </form>
-                            <p class="text-muted">made with ♥ by <a target='_blank' href='http://hugo.sx/'>hugo</a> at <a href='http://unihack.net/'>UNIHACK</a>.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-md-pull-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">What is QuickCraft?</h3>
+                        </div>
+                        <div class="panel-body">
+                            QuickCraft lets you roll your own Minecraft server in just a couple of minutes. Simply choose the number of days you want to have the server for, pay for the server time (<b>no profits</b> made),
+                            and QuickCraft will create a <a href='http://digitalocean.com'>DigitalOcean</a> VPS with a Minecraft server up and running!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-md-pull-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Is that it?</h3>
+                        </div>
+                        <div class="panel-body">
+                            No. I'm planning to develop a web panel to do simple things like restart the server and load custom maps.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-md-pull-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">What happens after I pay?</h3>
+                        </div>
+                        <div class="panel-body">
+                            Once the payment goes through, you'll receive an email containing the IP address and port of your new Minecraft server!
                         </div>
                     </div>
                 </div>
@@ -68,7 +96,17 @@
             </div>
         </div>
 
+        <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-8">
+                <p class="text-muted">made with ♥ by <a target='_blank' href='http://hugo.sx/'>hugo</a> at <a href='http://unihack.net/'>UNIHACK</a>.</p>
+            </div>
+        </div>
     </div><!-- /.container -->
 
+    <div class="container">
+        <div class="col-md-8 col-md-offset-2">
+
+        </div>
+    </div>
     {% endblock body %}
 {% include "includes/footer.html" %}
