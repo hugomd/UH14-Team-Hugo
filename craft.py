@@ -59,9 +59,16 @@ def get_user_id(email, mc_user):
                   [email, mc_user], one=True)
     return rv[0] if rv else None
 
+def countDroplets():
+    count = 0;
+    for i in do.all_active_droplets():
+        count += 1
+
+    return count
+
 class SignupForm(Form):
-    mc_user = StringField(u'Minecraft Username', validators=[validators.Required(message=u'Minecraft username required')])
-    email = StringField(u'Email', validators=[validators.Email(message=u'That\'s not an email!')])
+    mc_user = StringField(u'Minecraft Username', validators=[validators.Required(message=u'Minecraft username required'), validators.Length(min = 4, max = 100, message=u'Minecraft username must be 4 characters or more.')])
+    email = StringField(u'Email', validators=[validators.Required(message=u'Email required.'), validators.Email(message=u'That\'s not an email!')])
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
@@ -69,7 +76,6 @@ def index():
 
     if request.method == 'POST':
         if form.validate_on_submit() == True:
-            """Store stuff"""
             expires = int(time.time()) + 7200
             email = request.form['email']
             mc_user = request.form['mc_user']
