@@ -14,3 +14,5 @@ vast world of Minecraft with your friends!
 - [Stripe Checkout](https://stripe.com/docs/checkout)
 - [Twitter Bootstrap](http://getbootstrap.com/)
 - [Flask Python Web Framework](http://flask.pocoo.org/)
+- [DigitalOcean API v1](https://developers.digitalocean.com/v1/)
+- [Dopy Digital Ocean API Wrapper](https://github.com/devo-ps/dopy/)
