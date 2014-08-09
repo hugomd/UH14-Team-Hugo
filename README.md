@@ -1,6 +1,11 @@
 ###Craft!
-A one-click Minecraft server creator with custom maps that can be chosen or uploaded by the user. Start up a server in under a minute and start exploring the
+A one-click Minecraft server creator with custom maps that can be chosen or uploaded by the user. Start up a server in a couple of minutes and start exploring the
 vast world of Minecraft with your friends!
+
+#####Notes  
+ - Server startup is normally less than two minutes.
+ - Servers have 1 GB RAM and are currently hosted in Singapore
+ - Entire site will break once DigitalOcean droplet limit is hit (20 droplets)  
 
 ####Team
 - [Hugo M&uuml;ller-Downing](http://hugo.sx/)

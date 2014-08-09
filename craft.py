@@ -84,13 +84,13 @@ def index():
                 db.commit()
 
                 # create minecraft server
-                do.new_droplet('MINECRAFTUSERNAME', 63, 5588929, 6, ssh_key_ids = None, virtio = False, private_networking = False, backups_enabled = False)
+                do.new_droplet(mc_user, 63, 5592844, 6, ssh_key_ids = None, virtio = False, private_networking = False, backups_enabled = False)
 
                 for i in do.all_active_droplets():
                     if i['name'] == mc_user:
                         ip = i['ip_address']
 
-                flash(Markup("Awesome! Your account has been setup, <a href='http://localhost:5000/key/" + key + "/'>here</a> to see if your server is setup."))
+                flash(Markup("Awesome! Your server is being setup <b>right</b> now! Here's your server's IP: " + str(ip) + " now go spam refresh!"))
 
             else:
                 flash("Email or Minecraft username already in use.")
@@ -128,4 +128,4 @@ def api(hostname):
     return render_template('API.html', title="API!", hostname = hostname, user = user)
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0', port=80)
